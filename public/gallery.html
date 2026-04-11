@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gallery — Kofo Photography</title>
+  <link rel="stylesheet" href="/styles/global.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <div class="gallery-container" id="gallery-app">
+    <!-- Header -->
+    <div class="gallery-header">
+      <div class="gallery-title">
+        <img src="/logo.png" alt="" class="logo-sm" />
+        <h1 id="album-title">Gallery</h1>
+      </div>
+      <div class="gallery-actions">
+        <span id="selection-count" class="btn-sm" style="color:var(--text-muted); display:none">0 selected</span>
+        <button class="btn btn-ghost btn-sm" id="select-all-btn">Select All</button>
+        <button class="btn btn-primary btn-sm" id="download-btn" disabled>
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          Download
+        </button>
+        <button class="btn btn-ghost btn-sm" id="logout-btn">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+            <polyline points="16 17 21 12 16 7"/>
+            <line x1="21" y1="12" x2="9" y2="12"/>
+          </svg>
+          Log out
+        </button>
+      </div>
+    </div>
+
+    <!-- Loading skeletons -->
+    <div class="gallery-grid" id="skeleton-grid">
+      <div class="skeleton"></div><div class="skeleton"></div>
+      <div class="skeleton"></div><div class="skeleton"></div>
+      <div class="skeleton"></div><div class="skeleton"></div>
+      <div class="skeleton"></div><div class="skeleton"></div>
+    </div>
+
+    <!-- Photo grid (hidden until loaded) -->
+    <div class="gallery-grid" id="photo-grid" style="display:none"></div>
+
+    <!-- Error -->
+    <div class="gallery-error" id="gallery-error" style="display:none"></div>
+  </div>
+
+  <!-- Lightbox -->
+  <div class="lightbox-overlay" id="lightbox" style="display:none">
+    <div class="lightbox-content">
+      <button class="lightbox-close" id="lightbox-close" aria-label="Close">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+      <button class="lightbox-nav lightbox-prev" id="lightbox-prev" aria-label="Previous">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="15 18 9 12 15 6"/>
+        </svg>
+      </button>
+      <img id="lightbox-img" class="lightbox-image" src="" alt="" />
+      <button class="lightbox-nav lightbox-next" id="lightbox-next" aria-label="Next">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="9 18 15 12 9 6"/>
+        </svg>
+      </button>
+      <div class="lightbox-toolbar">
+        <span class="lightbox-counter" id="lightbox-counter"></span>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/gallery.js"></script>
+</body>
+</html>
