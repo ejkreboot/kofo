@@ -340,7 +340,7 @@ body {
   overflow: hidden;
   border-radius: var(--radius);
   cursor: pointer;
-  background: var(--bg);
+  background: #000;
   transition: transform var(--transition);
 }
 
@@ -358,7 +358,8 @@ body {
   height: 100%;
   object-fit: cover;
   display: block;
-  background: var(--bg);
+  background: #000;
+  color: transparent;
   transition: opacity var(--transition);
 }
 
