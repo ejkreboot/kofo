@@ -5,14 +5,12 @@ import vercel from "@astrojs/vercel";
 export default defineConfig({
   output: "server",
   adapter: vercel({
-    isr: {
-      expiration: false,
-    },
+    functionPerRoute: false,
   }),
   integrations: [preact()],
   vite: {
     ssr: {
-      external: ["@vercel/routing-utils"],
+      noExternal: ["@vercel/routing-utils"],
     },
   },
 });
