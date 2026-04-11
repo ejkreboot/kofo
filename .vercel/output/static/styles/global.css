@@ -72,12 +72,33 @@ body {
   text-align: center;
 }
 
+.logo-landing {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+  margin-bottom: 1rem;
+  border-radius: var(--radius-lg);
+}
+
+.logo-sm {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+  border-radius: 6px;
+}
+
 .brand {
   font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.15em;
   color: var(--text-muted);
   margin-bottom: 1.5rem;
+}
+
+.gallery-title {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
 }
 
 .password-icon {

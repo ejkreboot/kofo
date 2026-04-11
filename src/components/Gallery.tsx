@@ -101,7 +101,10 @@ export function Gallery({ albumId, albumName }: Props) {
     return (
       <div class="gallery-container">
         <header class="gallery-header">
-          <h1>{albumName}</h1>
+          <div class="gallery-title">
+            <img src="/logo.png" alt="Kort Amateur Photography" class="logo-sm" />
+            <h1>{albumName}</h1>
+          </div>
         </header>
         <div class="gallery-grid">
           {Array.from({ length: 12 }).map((_, i) => (
@@ -123,7 +126,10 @@ export function Gallery({ albumId, albumName }: Props) {
   return (
     <div class="gallery-container">
       <header class="gallery-header">
-        <h1>{albumName}</h1>
+        <div class="gallery-title">
+          <img src="/logo.png" alt="Kort Amateur Photography" class="logo-sm" />
+          <h1>{albumName}</h1>
+        </div>
         <div class="gallery-actions">
           {photos.length > 0 && (
             <button class="btn btn-ghost" onClick={selected.size === photos.length ? deselectAll : selectAll}>
