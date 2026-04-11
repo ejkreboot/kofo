@@ -1,8 +1,15 @@
 import { h } from "preact";
 import { useState, useEffect, useCallback } from "preact/hooks";
 import { Lightbox } from "./Lightbox";
-import JSZip from "jszip";
-import { saveAs } from "file-saver";
+
+function saveAs(blob: Blob, filename: string) {
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(url);
+}
 
 interface Photo {
   name: string;
@@ -65,6 +72,7 @@ export function Gallery({ albumId, albumName }: Props) {
     setDownloadProgress(0);
 
     try {
+      const { default: JSZip } = await import("jszip");
       const zip = new JSZip();
       const selectedPhotos = photos.filter((p) => selected.has(p.name));
       let done = 0;
@@ -150,6 +158,7 @@ export function Gallery({ albumId, albumName }: Props) {
               src={photo.thumb}
               alt={photo.name}
               loading="lazy"
+              decoding="async"
               onClick={() => setLightboxIndex(index)}
             />
           </div>

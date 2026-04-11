@@ -6,23 +6,42 @@ const POST = async ({
   cookies
 }) => {
   const body = await request.json().catch(() => null);
-  if (!body?.albumId || !body?.password) {
+  const hasId = !!body?.albumId;
+  const hasName = !!body?.albumName;
+  if (!hasId && !hasName || !body?.password) {
     return new Response(JSON.stringify({
-      error: "Missing albumId or password"
+      error: "Missing album identifier or password"
     }), {
       status: 400
     });
   }
-  const {
-    data,
-    error
-  } = await supabase.rpc("verify_album_password", {
-    p_album_id: body.albumId,
-    p_password: body.password
-  });
+  let data, error;
+  if (hasId) {
+    ({
+      data,
+      error
+    } = await supabase.rpc("verify_album_password", {
+      p_album_id: body.albumId,
+      p_password: body.password
+    }));
+  } else {
+    ({
+      data,
+      error
+    } = await supabase.rpc("verify_album_password_by_name", {
+      p_album_name: body.albumName,
+      p_password: body.password
+    }));
+  }
   if (error || !data || data.length === 0) {
+    const detail = error ? `RPC error: ${error.message}` : !data ? "No data returned" : "No matching album (wrong name or password)";
+    console.error("Auth failed:", detail, {
+      error,
+      dataLength: data?.length
+    });
     return new Response(JSON.stringify({
-      error: "Invalid password"
+      error: "Invalid album name or password",
+      detail
     }), {
       status: 401
     });
@@ -44,6 +63,7 @@ const POST = async ({
   });
   return new Response(JSON.stringify({
     success: true,
+    albumId: album.id,
     albumName: album.name
   }), {
     status: 200

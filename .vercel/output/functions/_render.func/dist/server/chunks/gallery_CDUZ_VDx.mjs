@@ -12,7 +12,7 @@ const $$Gallery = createComponent(($$result, $$props, $$slots) => {
     return Astro2.redirect(`/${Astro2.params.albumId}`);
   }
   const { albumId, albumName } = album;
-  return renderTemplate`<html lang="en"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>${albumName}</title><link rel="stylesheet" href="/styles/global.css">${renderHead()}</head> <body> <div id="gallery-root"${addAttribute(albumId, "data-album-id")}${addAttribute(albumName, "data-album-name")}></div> ${renderScript($$result, "/Users/erikor/kofo/src/pages/[albumId]/gallery.astro?astro&type=script&index=0&lang.ts")} </body> </html>`;
+  return renderTemplate`<html lang="en"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>${albumName} — Kort Amateur Photography</title><link rel="stylesheet" href="/styles/global.css">${renderHead()}</head> <body> <div id="gallery-root"${addAttribute(albumId, "data-album-id")}${addAttribute(albumName, "data-album-name")}></div> ${renderScript($$result, "/Users/erikor/kofo/src/pages/[albumId]/gallery.astro?astro&type=script&index=0&lang.ts")} </body> </html>`;
 }, "/Users/erikor/kofo/src/pages/[albumId]/gallery.astro", void 0);
 
 const $$file = "/Users/erikor/kofo/src/pages/[albumId]/gallery.astro";

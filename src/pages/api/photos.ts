@@ -37,6 +37,19 @@ export const GET: APIRoute = async ({ request, cookies }) => {
 
   const SIGNED_URL_EXPIRY = 60 * 60 * 4; // 4 hours
 
+  // Generate signed URLs for thumbnails (smaller size for fast grid loading)
+  const { data: signedThumb, error: thumbErr } = await supabase.storage
+    .from(payload.bucketId)
+    .createSignedUrls(
+      imageFiles.map((f) => f.name),
+      SIGNED_URL_EXPIRY,
+      { transform: { width: 250, height: 250, resize: "cover", quality: 75 } },
+    );
+
+  if (thumbErr || !signedThumb) {
+    return new Response(JSON.stringify({ error: "Failed to generate URLs" }), { status: 500 });
+  }
+
   // Generate signed URLs for full-res images
   const { data: signedFull, error: signErr } = await supabase.storage
     .from(payload.bucketId)
@@ -46,19 +59,6 @@ export const GET: APIRoute = async ({ request, cookies }) => {
     );
 
   if (signErr || !signedFull) {
-    return new Response(JSON.stringify({ error: "Failed to generate URLs" }), { status: 500 });
-  }
-
-  // Generate signed URLs for thumbnails (with image transform)
-  const { data: signedThumb, error: thumbErr } = await supabase.storage
-    .from(payload.bucketId)
-    .createSignedUrls(
-      imageFiles.map((f) => f.name),
-      SIGNED_URL_EXPIRY,
-      { transform: { width: 400, height: 400, resize: "cover" } },
-    );
-
-  if (thumbErr || !signedThumb) {
     return new Response(JSON.stringify({ error: "Failed to generate URLs" }), { status: 500 });
   }
 

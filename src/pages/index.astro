@@ -6,13 +6,91 @@ export const prerender = true;
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Gallery</title>
+    <title>Kort Amateur Photography</title>
     <link rel="stylesheet" href="/styles/global.css" />
   </head>
   <body>
-    <main class="landing">
-      <h1>Photo Gallery</h1>
-      <p>Enter your album link to view your photos.</p>
+    <main class="password-page">
+      <div class="password-card">
+        <div class="brand">Kort Amateur Photography</div>
+        <div class="password-icon">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="6" width="20" height="14" rx="2" />
+            <circle cx="12" cy="13" r="4" />
+            <path d="M16 6V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" />
+          </svg>
+        </div>
+        <h1>View Your Photos</h1>
+        <p class="subtitle">Enter your album name and password to access your gallery</p>
+        <form id="login-form">
+          <input
+            type="text"
+            name="albumName"
+            placeholder="Album name"
+            autocomplete="off"
+            required
+          />
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            autocomplete="current-password"
+            required
+          />
+          <button type="submit">
+            <span class="btn-text">View Album</span>
+            <span class="btn-loading" hidden>
+              <svg class="spinner" width="20" height="20" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3" fill="none" stroke-dasharray="31.4" stroke-dashoffset="10" />
+              </svg>
+            </span>
+          </button>
+          <p class="error" id="login-error" hidden></p>
+        </form>
+      </div>
     </main>
+    <script>
+      const form = document.getElementById("login-form") as HTMLFormElement;
+      const errorEl = document.getElementById("login-error") as HTMLParagraphElement;
+      const btn = form.querySelector("button") as HTMLButtonElement;
+      const btnText = btn.querySelector(".btn-text") as HTMLSpanElement;
+      const btnLoading = btn.querySelector(".btn-loading") as HTMLSpanElement;
+
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        errorEl.hidden = true;
+        btn.disabled = true;
+        btnText.hidden = true;
+        btnLoading.hidden = false;
+
+        const fd = new FormData(form);
+        const albumName = fd.get("albumName") as string;
+        const password = fd.get("password") as string;
+
+        try {
+          const res = await fetch("/api/auth", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ albumName, password }),
+          });
+
+          const data = await res.json();
+
+          if (res.ok && data.albumId) {
+            window.location.href = `/${data.albumId}/gallery`;
+          } else {
+            errorEl.textContent = data.detail || data.error || "Invalid album name or password";
+            errorEl.hidden = false;
+          }
+        } catch {
+          errorEl.textContent = "Something went wrong. Please try again.";
+          errorEl.hidden = false;
+        } finally {
+          btn.disabled = false;
+          btnText.hidden = false;
+          btnLoading.hidden = true;
+        }
+      });
+    </script>
   </body>
 </html>
