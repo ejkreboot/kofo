@@ -48,4 +48,4 @@ alter table public.albums enable row level security;
 -- No SELECT/INSERT/UPDATE/DELETE policies for anon — all access goes through security definer functions
 -- Grant execute on the RPC functions to anon
 grant execute on function public.verify_album_password(uuid, text) to anon;
-grant execute on function public.create_album(text, text, text) to anon, authenticated;
+grant execute on function public.create_album(text, text, text) to authenticated;

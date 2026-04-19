@@ -228,6 +228,13 @@ body {
   text-align: center;
 }
 
+.admin-success {
+  color: #22c55e;
+  font-size: 0.8125rem;
+  text-align: center;
+  word-break: break-all;
+}
+
 /* Footer */
 .landing-footer {
   padding: 1.5rem 2.5rem;

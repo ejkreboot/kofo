@@ -10,7 +10,13 @@ const supabase = createClient(
   process.env.PUBLIC_SUPABASE_ANON_KEY
 );
 
+const supabaseAdmin = createClient(
+  process.env.PUBLIC_SUPABASE_URL,
+  process.env.SUPABASE_SERVICE_ROLE_KEY
+);
+
 const TOKEN_SECRET = process.env.ALBUM_TOKEN_SECRET;
+const ADMIN_API_KEY = process.env.ADMIN_API_KEY;
 
 // ─── Middleware ───
 app.use(express.json());
@@ -59,6 +65,48 @@ function requireAuth(req, res, next) {
     return res.status(401).json({ error: 'Invalid or expired token' });
   }
 }
+
+// ─── Admin middleware ───
+function requireAdmin(req, res, next) {
+  if (!ADMIN_API_KEY || req.headers['x-admin-key'] !== ADMIN_API_KEY) {
+    return res.status(403).json({ error: 'Forbidden' });
+  }
+  next();
+}
+
+// ─── Admin: create album + storage bucket ───
+app.post('/api/admin/albums', requireAdmin, async (req, res) => {
+  const { name, password } = req.body;
+  if (!name || !password) {
+    return res.status(400).json({ error: 'name and password required' });
+  }
+
+  const bucketId = crypto.randomUUID();
+
+  // Create the storage bucket (public so photos can be served)
+  const { error: bucketError } = await supabaseAdmin.storage.createBucket(bucketId, {
+    public: true,
+  });
+
+  if (bucketError) {
+    console.error('Bucket creation error:', bucketError.message);
+    return res.status(500).json({ error: 'Failed to create storage bucket' });
+  }
+
+  // Create the album record via RPC
+  const { data: albumId, error: albumError } = await supabaseAdmin.rpc('create_album', {
+    p_bucket_id: bucketId,
+    p_name: name,
+    p_password: password,
+  });
+
+  if (albumError) {
+    console.error('Create album error:', albumError.message);
+    return res.status(500).json({ error: 'Failed to create album' });
+  }
+
+  res.status(201).json({ albumId, bucketId, name });
+});
 
 // ─── Photos: list files in the album's bucket ───
 app.get('/api/photos', requireAuth, async (req, res) => {
