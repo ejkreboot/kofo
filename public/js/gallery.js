@@ -68,7 +68,8 @@
           <input type="checkbox" data-name="${encodeURIComponent(photo.name)}" />
           <span class="checkmark"></span>
         </label>
-        <img src="${photo.url}" alt="${photo.name}" loading="lazy" />
+        <span class="gallery-loading material-icons">image</span>
+        <img src="${photo.url}" alt="${photo.name}" loading="lazy" onload="this.previousElementSibling.style.display='none'" />
       `;
 
       // Click image -> lightbox

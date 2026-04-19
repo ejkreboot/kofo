@@ -360,10 +360,20 @@ body {
   outline-offset: -3px;
 }
 
+.gallery-loading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 48px;
+  color: #444;
+  pointer-events: none;
+}
+
 .gallery-item img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   display: block;
   background: #000;
   color: transparent;
